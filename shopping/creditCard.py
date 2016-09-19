@@ -10,7 +10,6 @@
 '''
 from login import login
 from select import getSelection
-from select import getSelection2
 import json
 import time
 import re
@@ -25,48 +24,50 @@ cardMenu = ['MyCard','Withdraws','Transfers','Repayment','CardLog','Logout']
 #readed = json.load(open('cardinfo.txt', 'r'))
 #json.dump(readed, open('cardinfo2.txt', 'w'))
 
-def changeCardInfo(userid,changeitem,value=None):
+def changeCardInfo(cardid,changeitem,value=None):
     '''信用卡账户金额相关修改操作
-    @param userid:用户名
+    @param cardid:用户名
     @param changeitem:需修改项目，0：信用卡限额，1：当前信用卡可用额度，2：信用卡提现限额，3：当前信用卡可体现额度
     @param value:修改后的值
              所有读取json化操作，相关文件cardinfo.txt    
     '''
-    cardid = userid[0]
     cardinfo_dict = json.load(open('cardinfo.txt','r'))
     if value == None:
         return cardinfo_dict[cardid][changeitem]
     cardinfo_dict[cardid][changeitem] = value
-    json.dump(cardinfo_dict,open('cardinfo.txt','w'))
+    json.dump(cardinfo_dict,open('cardinfo.txt','w'),sort_keys = True)
     return cardinfo_dict[cardid][changeitem]            
     
-def Withdraws(userid):
-    user = userid[0]
-    cur_credit_limit = changeCardInfo(userid,0)
-    cur_credit = changeCardInfo(userid,1)
-    cur_withdraws_limit =changeCardInfo(userid,2)
-    cur_withdraws = changeCardInfo(userid,3)
+def Withdraws(cardid):
+    cur_credit_limit = changeCardInfo(cardid,0)
+    cur_credit = changeCardInfo(cardid,1)
+    cur_withdraws_limit =changeCardInfo(cardid,2)
+    cur_withdraws = changeCardInfo(cardid,3)
     print '''
         用户{0}的信用限额:{1}RMB
         当前可用信用额度:{2}RMB
         提现限额:{3}RMB
         当前可用提现额度:{4}RMB
-        '''.format(user,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws)
+        '''.format(cardid,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws)
     while True:
         money = raw_input('How much do you want to take?(0～{0})'.format(cur_withdraws))
         if re.match(r'\d+',money):
             if 0<=int(money)<=int(cur_withdraws):
                 print 'Now you got {0}RMB from creditcard'.format(money)
                 new_credit = cur_credit - int(money)
-                cur_credit = changeCardInfo(userid,1,new_credit)
+                cur_credit = changeCardInfo(cardid,1,new_credit)
                 new_withdraws = cur_withdraws - int(money)
-                cur_withdraws = changeCardInfo(userid,3,new_withdraws)
+                cur_withdraws = changeCardInfo(cardid,3,new_withdraws)
                 print '''
         \t用户 {0}的信用限额:\t{1}RMB
         \t当前可用信用额度:\t{2}RMB
         \t提现限额:\t{3}RMB
         \t当前可用提现额度:\t{4}RMB
-        '''.format(user,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws)
+        '''.format(cardid,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws)
+                value = (time.ctime(),cardid,money,)
+                record ='时间：%s,用户：%s，操作：提现 %s RMB 成功'%value
+                cardRecord(record,value)
+                print '*****Log:',record,'******'
                 while True:
                     decision = raw_input('Do you want to continue to take money?(Y/N)')
                     if decision !='Y'and decision !='N':
@@ -80,12 +81,11 @@ def Withdraws(userid):
         else:
             print 'Please input a valid number!'
             
-def Repayment(userid):
-    user = userid[0]
-    cur_credit_limit = changeCardInfo(userid,0)
-    cur_credit = changeCardInfo(userid,1)
-    cur_withdraws_limit =changeCardInfo(userid,2)
-    cur_withdraws = changeCardInfo(userid,3)
+def Repayment(cardid):
+    cur_credit_limit = changeCardInfo(cardid,0)
+    cur_credit = changeCardInfo(cardid,1)
+    cur_withdraws_limit =changeCardInfo(cardid,2)
+    cur_withdraws = changeCardInfo(cardid,3)
     cur_balance = cur_credit_limit - cur_credit
     print '''
         用户{0}的信用限额:{1}RMB
@@ -93,18 +93,16 @@ def Repayment(userid):
         提现限额:{3}RMB
         当前可用提现额度:{4}RMB
         当前应还款额:{5}RMB
-        '''.format(user,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws,cur_balance)
+        '''.format(cardid,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws,cur_balance)
     while True:
         money = raw_input('How much do you want to repay?')
         if re.match(r'\d+',money):
             if int(money)>=0:
                 print 'Now you repay {0}RMB from creditcard'.format(money)
                 new_credit = cur_credit + int(money)
-                cur_credit = changeCardInfo(userid,1,new_credit)
-                print new_credit,cur_credit
-                time.sleep(15)
+                cur_credit = changeCardInfo(cardid,1,new_credit)
                 new_withdraws = cur_withdraws + int(money)
-                cur_withdraws = changeCardInfo(userid,3,new_withdraws)
+                cur_withdraws = changeCardInfo(cardid,3,new_withdraws)
                 cur_balance = cur_credit_limit - cur_credit
                 print '''
         用户{0}的信用限额:\t{1}RMB
@@ -112,7 +110,11 @@ def Repayment(userid):
         提现限额:\t{3}RMB
         当前可用提现额度:\t{4}RMB
         当前应还款额:{5}RMB
-        '''.format(user,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws,cur_balance)
+        '''.format(cardid,cur_credit_limit,cur_credit,cur_withdraws_limit,cur_withdraws,cur_balance)
+                value = (time.ctime(),cardid,money,)
+                record ='时间：%s,用户：%s，操作：还款 %s RMB 成功'%value
+                cardRecord(record,value)
+                print '*****Log:',record,'******'
                 while True:
                     decision = raw_input('Do you want to continue to repay?(Y/N)')
                     if decision !='Y'and decision !='N':
@@ -126,11 +128,46 @@ def Repayment(userid):
         else:
             print 'Please input a valid number!'
                 
+
+
+def MyCard(cardid):
+    print '''-----------------我的信用卡-----------'''
+    with open('cardinfo.txt','r') as f:
+        for line in f:
+            userinfo = line.split()
+            if userinfo[0] == cardid:
+                print '''
+        用户名：\t{0}
+        消费限额：\t{1}
+        当前消费额度：\t{2}
+        提现限额：\t{3}
+        当前提现额度：\t{4}
+                '''.format(*userinfo)
+                break
+                
+def Transfers():
+    pass
+
+def cardRecord(record,value):
+    recorddb = json.load(open('recordlog.txt','r'))
+    if not recorddb.has_key(value[1]):
+        recorddb[value[1]] = [record,]
+    recorddb[value[1]].append(record)
+    json.dump(recorddb,open('recordlog.txt','w'),sort_keys = True)
+    
+
+def CardLog(cardid):
+    card_logs = json.load(open('recordlog.txt','r'))
+    print '---------用户日志：%s-----------'%cardid
+    for item in card_logs[cardid]:
+        print item
+    raw_input("Press 'ENTER' to back to the Menu")
+
 def creditCardMain():
-    ID = login('carduserdb')
-    while True:
+    ID = login('carduserdb')   #需完善登陆逻辑，登录失败后返回主程序
+    while ID:
         print '''----------信用卡中心-----------'''
-        print '用户名：%s'%ID[0]
+        print '用户名：%s'%ID
         for i in cardMenu:
             print '----%d\t%s-----'%(cardMenu.index(i)+1,i)
         print '''---------------------''' 
@@ -145,31 +182,11 @@ def creditCardMain():
         elif choice == 4:
             Repayment(ID)
         elif choice == 5:
-            CardLog()
-            print 'CardLog'
+            CardLog(ID)
         else:
-            print 'Logout'
+            print '用户 %s退出，返回主菜单'%ID
             break
+    else:
+        print '登录失败，返回主菜单'
 
-def MyCard(userid):
-    print '''-----------------我的信用卡-----------'''
-    with open('cardinfo.txt','r') as f:
-        for line in f:
-            userinfo = line.split()
-            if userinfo[0] == userid[0]:
-                print '''
-        用户名：\t{0}
-        消费限额：\t{1}
-        当前消费额度：\t{2}
-        提现限额：\t{3}
-        当前提现额度：\t{4}
-                '''.format(*userinfo)
-                break
-                
-def Transfers():
-    pass
-def CardLog():
-    pass
-
-creditCardMain()
 

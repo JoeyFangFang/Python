@@ -2,6 +2,7 @@
 '''判断选择是否正确'''
 
 import re
+import json
 
 #判断输入数字是否有效
 def isValidNum(num):
@@ -30,17 +31,14 @@ def getSelection(s_list):
                 continue
         print '[Warning]Please input a valid interge!'
         
-def getSelection2(s_dict):
-    '''物品选择'''
+def getItem():
+    '''购物商品选择'''
+    goodsDict = json.load(open('goodsdb.txt','r'))
     while True:
-        a= list(enumerate(s_dict,1))
-        for item in a:
-            print '%d\t%s\t%s'%(item[0],item[1],s_dict[item[1]])
-        selection = raw_input('Please enter the Goods Number what do you want to buy?(1~ %d)'%len(s_dict))
-        if isValidNum(selection):
-            if isValidSelection(int(selection),s_dict):
-                return a[int(selection)-1]
-            else:
-                print '[Warning]Please input a valid Selection!'
-                continue
-        print '[Warning]Please input a valid interge!'
+        for item in goodsDict:
+            print '\t{0:5}\t{1:5}\t{2:5}\t{3:5}'.format(item,*goodsDict[item])
+        selection = raw_input('Please input the Item Number what do you want to buy?')
+        if selection in goodsDict:
+            return selection
+        else:
+            print 'Please input the correct Item Number!'
