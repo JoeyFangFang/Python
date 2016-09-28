@@ -1,4 +1,7 @@
 #_*_ coding:utf-8 _*_
+#!/usr/bin/env python
+#_*_ coding:utf-8 _*_
+#Author:JoeyFang
 #Filename:creditCard.py
 '''信用卡主程序
     1. 我的信用卡    2. 提现    3. 转账    4. 还款    5. 流水记录    6. 返回

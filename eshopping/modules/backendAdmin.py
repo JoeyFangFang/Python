@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 #_*_ coding:utf-8 _*_
+#Author:JoeyFang
 '''后台管理程序:
     1. 创建账户    2. 锁定账户    3. 解锁账户
     4. 绑定信用卡    5. 锁定信用卡    6. 解锁信用卡

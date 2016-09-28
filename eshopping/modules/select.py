@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 #_*_ coding:utf-8 _*_
+#Author:JoeyFang
 '''判断选择是否正确'''
 
 import re

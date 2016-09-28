@@ -1,56 +1,56 @@
-³ÌÐòËµÃ÷£º
-¹¦ÄÜ£ºÊµÏÖ¹ºÎï¡¢½áËã¡¢ÐÅÓÃ¿¨¹ÜÀíµÈ³£¼ûÍøÉÏÉÌ³Ç¹ºÎïÁ÷³Ì
-v1£ºº¯ÊýÊ½Á÷³Ì£º
+ï»¿ç¨‹åºè¯´æ˜Žï¼š
+åŠŸèƒ½ï¼šå®žçŽ°è´­ç‰©ã€ç»“ç®—ã€ä¿¡ç”¨å¡ç®¡ç†ç­‰å¸¸è§ç½‘ä¸Šå•†åŸŽè´­ç‰©æµç¨‹
+v1ï¼šå‡½æ•°å¼æµç¨‹ï¼š
 
-1. ¹ºÎï£¨Shopping)   #µÇÂ¼¹ºÎïÕË»§£¨shopping_userdb£© 
-1.1 ¹ºÎï 1.2 Çå¿Õ¹ºÎï³µ 3. ½áËã 4.¸öÈËÖÐÐÄ£¨°ó¶¨ÐÅÓÃ¿¨£¬¹ºÎïÈÕÖ¾)
-ÎÄ¼þ£ºÉÌÆ·ÐÅÏ¢£¨goodsdb£©¹ºÎïÕË»§£¨shopping_userdb£© °ó¶¨ÎÄ¼þ£¨userbind£© ¹ºÎï³µÄ¿Â¼£¨cartdb£©ÈÕÖ¾£¨recordlog£©
+1. è´­ç‰©ï¼ˆShopping)   #ç™»å½•è´­ç‰©è´¦æˆ·ï¼ˆshopping_userdbï¼‰ 
+1.1 è´­ç‰© 1.2 æ¸…ç©ºè´­ç‰©è½¦ 3. ç»“ç®— 4.ä¸ªäººä¸­å¿ƒï¼ˆç»‘å®šä¿¡ç”¨å¡ï¼Œè´­ç‰©æ—¥å¿—)
+æ–‡ä»¶ï¼šå•†å“ä¿¡æ¯ï¼ˆgoodsdbï¼‰è´­ç‰©è´¦æˆ·ï¼ˆshopping_userdbï¼‰ ç»‘å®šæ–‡ä»¶ï¼ˆuserbindï¼‰ è´­ç‰©è½¦ç›®å½•ï¼ˆcartdbï¼‰æ—¥å¿—ï¼ˆrecordlogï¼‰
 
-2. ÐÅÓÃ¿¨£¨CreditCard£© #µÇÂ½ÐÅÓÃ¿¨ÕË»§ £¨carduserdb£©
-2.1 ÎÒµÄÐÅÓÃ¿¨ 2.2 ÌáÏÖ 2.3 ×ªÕË 2.4 »¹¿î 2.4 Á÷Ë®¼ÇÂ¼ 
-ÎÄ¼þ£ºÐÅÓÃ¿¨ÐÅÏ¢£¨cardinfo£©  
+2. ä¿¡ç”¨å¡ï¼ˆCreditCardï¼‰ #ç™»é™†ä¿¡ç”¨å¡è´¦æˆ· ï¼ˆcarduserdbï¼‰
+2.1 æˆ‘çš„ä¿¡ç”¨å¡ 2.2 æçŽ° 2.3 è½¬è´¦ 2.4 è¿˜æ¬¾ 2.4 æµæ°´è®°å½• 
+æ–‡ä»¶ï¼šä¿¡ç”¨å¡ä¿¡æ¯ï¼ˆcardinfoï¼‰  
 
-3. ºóÌ¨¹ÜÀí£¨BackendAdmin£©#µÇÂ½¹ÜÀíÔ±ÕË»§
-3.1 ¹ºÎïÕË»§¹ÜÀí£¨´´½¨ÕË»§£¬Ëø¶¨ÕË»§£¬½âËøÕË»§£©
-3.2 ÐÅÓÃ¿¨ÕË»§¹ÜÀí£¨°ó¶¨ÐÅÓÃ¿¨£¬Ëø¶¨ÐÅÓÃ¿¨£¬½âËøÐÅÓÃ¿¨£¬ÌáÉý¶î¶È£©
+3. åŽå°ç®¡ç†ï¼ˆBackendAdminï¼‰#ç™»é™†ç®¡ç†å‘˜è´¦æˆ·
+3.1 è´­ç‰©è´¦æˆ·ç®¡ç†ï¼ˆåˆ›å»ºè´¦æˆ·ï¼Œé”å®šè´¦æˆ·ï¼Œè§£é”è´¦æˆ·ï¼‰
+3.2 ä¿¡ç”¨å¡è´¦æˆ·ç®¡ç†ï¼ˆç»‘å®šä¿¡ç”¨å¡ï¼Œé”å®šä¿¡ç”¨å¡ï¼Œè§£é”ä¿¡ç”¨å¡ï¼Œæå‡é¢åº¦ï¼‰
 
 
 
 20116.9.12
-	Ôö¼Ó¡®ÐÅÓÃ¿¨´¦Àí¹¦ÄÜ¡¯£¬Õ¹Ê¾£¬Óöµ½À§ÄÑ£¨ÈçºÎ´¦ÀíÓÃ»§ÐÅÓÃ¿¨ÐÅÏ¢£©ÐÞ¸ÄÐÅÓÃ¿¨ÄÚ¶î¶ÈÏÞÖÆ£¬¸ü¸ÄÐÅÓÃ¿¨ÐÅÏ¢ÆÕÍ¨ÎÄ±¾ÎªjsonÑùÊ½£¬Ñ§Ï°json´¦ÀíÎÄ±¾£¨dump,load)
-	Õ¹Ê¾ÐÅÏ¢ºÍÐÞ¸ÄÐÅÏ¢changeCardInfo£¬Í¨¹ýÄ¬ÈÏ²ÎÊýµÄÐÎÊ½´ïµ½Ò»¸öº¯ÊýÁ½¸öÄ¿µÄ£¨ÏÔÊ¾»òÐÞ¸Ä£©
+	å¢žåŠ â€˜ä¿¡ç”¨å¡å¤„ç†åŠŸèƒ½â€™ï¼Œå±•ç¤ºï¼Œé‡åˆ°å›°éš¾ï¼ˆå¦‚ä½•å¤„ç†ç”¨æˆ·ä¿¡ç”¨å¡ä¿¡æ¯ï¼‰ä¿®æ”¹ä¿¡ç”¨å¡å†…é¢åº¦é™åˆ¶ï¼Œæ›´æ”¹ä¿¡ç”¨å¡ä¿¡æ¯æ™®é€šæ–‡æœ¬ä¸ºjsonæ ·å¼ï¼Œå­¦ä¹ jsonå¤„ç†æ–‡æœ¬ï¼ˆdump,load)
+	å±•ç¤ºä¿¡æ¯å’Œä¿®æ”¹ä¿¡æ¯changeCardInfoï¼Œé€šè¿‡é»˜è®¤å‚æ•°çš„å½¢å¼è¾¾åˆ°ä¸€ä¸ªå‡½æ•°ä¸¤ä¸ªç›®çš„ï¼ˆæ˜¾ç¤ºæˆ–ä¿®æ”¹ï¼‰
 2016.9.13
-	Ôö¼Ó È¡ÏÖ£¬»¹¿î¹¦ÄÜ£¬Ñ§Ï°¹Ø×¢¸ñÊ½»¯Êä³öprint format
+	å¢žåŠ  å–çŽ°ï¼Œè¿˜æ¬¾åŠŸèƒ½ï¼Œå­¦ä¹ å…³æ³¨æ ¼å¼åŒ–è¾“å‡ºprint format
 2016.9.15
-	Íê³ÉCreditCard´ó²¿·Ö¹¦ÄÜ£¬
-	ÖØÐÂ±àÐ´¹ºÎïÖÐÐÄ¹¦ÄÜ£¬ÐòÁÐ»¯¹ºÎïÉÌÆ·Çåµ¥
+	å®ŒæˆCreditCardå¤§éƒ¨åˆ†åŠŸèƒ½ï¼Œ
+	é‡æ–°ç¼–å†™è´­ç‰©ä¸­å¿ƒåŠŸèƒ½ï¼Œåºåˆ—åŒ–è´­ç‰©å•†å“æ¸…å•
 2016.9.16
-	ÐÞ¸ÄLogin£¬µÇÂ¼Ê§°ÜÊ±·µ»ØFalse
-	°ó¶¨ÐÅÓÃ¿¨ÕË»§ºÍ¹ºÎïÕË»§£¬Íê³É¸¶¿îÁ÷³Ì
+	ä¿®æ”¹Loginï¼Œç™»å½•å¤±è´¥æ—¶è¿”å›žFalse
+	ç»‘å®šä¿¡ç”¨å¡è´¦æˆ·å’Œè´­ç‰©è´¦æˆ·ï¼Œå®Œæˆä»˜æ¬¾æµç¨‹
 2016.9.20
-	ÍêÉÆºóÌ¨¹ÜÀí²¿·Ö
+	å®Œå–„åŽå°ç®¡ç†éƒ¨åˆ†
 2016.9.21
-	ÖØÐÂÊáÀíÈí¼þ¹¦ÄÜ	
+	é‡æ–°æ¢³ç†è½¯ä»¶åŠŸèƒ½	
 2016.9.22
-	³ÌÐòÓÅ»¯Ä¿Â¼½á¹¹£º
-©¦  index.py
-©¦  readme.txt
-©¦  __init__.py
-©¦
-©À©¤config
-©¦      __init__.py
-©¦
-©À©¤database
-©¦      cardinfo.txt
-©¦      carduserdb.txt
-©¦      cartdb.txt
-©¦      goodsdb.txt
-©¦      recordlog
-©¦      recordlog.txt
-©¦      shopping_userdb.txt
-©¦      userbind.txt
-©¦
-©¸©¤modules
+	ç¨‹åºä¼˜åŒ–ç›®å½•ç»“æž„ï¼š
+â”‚  index.py
+â”‚  readme.txt
+â”‚  __init__.py
+â”‚
+â”œâ”€config
+â”‚      __init__.py
+â”‚
+â”œâ”€database
+â”‚      cardinfo.txt
+â”‚      carduserdb.txt
+â”‚      cartdb.txt
+â”‚      goodsdb.txt
+â”‚      recordlog
+â”‚      recordlog.txt
+â”‚      shopping_userdb.txt
+â”‚      userbind.txt
+â”‚
+â””â”€modules
         backendAdmin.py
         backendAdmin.pyc
         creditCard.py
@@ -64,6 +64,7 @@ v1£ºº¯ÊýÊ½Á÷³Ì£º
         shopping.pyc
         __init__.py	
 
-	¸ù¾ÝÐÂÄ¿Â¼½á¹¹ÐÞ¸Ä³ÌÐò
+	æ ¹æ®æ–°ç›®å½•ç»“æž„ä¿®æ”¹ç¨‹åº
 
-
+2016.9.27
+	é‡‡ç”¨sqlite3æ•°æ®åº“ï¼Œå­¦ä¹ æ•°æ®åº“ç¼–ç¨‹éƒ¨åˆ†ï¼Œé‡æ–°ç¼–å†™ç¨‹åº

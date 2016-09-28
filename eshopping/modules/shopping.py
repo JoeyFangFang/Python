@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 #_*_ coding:utf-8 _*_
+#Author:JoeyFang
 #Filename:shopping.py
 '''购物中心：
     1. 购物    2. 清空购物车    3. 结算    4. 个人中心
