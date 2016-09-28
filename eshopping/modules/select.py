@@ -3,6 +3,7 @@
 
 import re
 import json
+from eshopping.config.config import GoodsDBFile
 
 #判断输入数字是否有效
 def isValidNum(num):
@@ -33,7 +34,7 @@ def getSelection(s_list):
         
 def getItem():
     '''购物商品选择'''
-    goodsDict = json.load(open('goodsdb.txt','r'))
+    goodsDict = json.load(open(GoodsDBFile,'r'))
     while True:
         for item in goodsDict:
             print '\t{0:5}\t{1:5}\t{2:5}\t{3:5}'.format(item,*goodsDict[item])

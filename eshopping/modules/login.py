@@ -3,12 +3,11 @@
 
 import json
 
-def login(Info_path):
+def login(userdbfile):
     #设定计数器
     count = 0
     #设定用户字典，用户锁定字典
-    userfile = Info_path+'.txt'
-    logindb = json.load(open(userfile,'r'))  
+    logindb = json.load(open(userdbfile,'r'))  
     while count < 3:
         print "------Please Login:---------"
         name = raw_input("User:")
@@ -28,5 +27,5 @@ def login(Info_path):
         if name in logindb.keys():
             logindb[name]["locked"]='y'
             print "User is Locked. Please phone to 110!"
-            json.dump(logindb,open(userfile,'w'))
+            json.dump(logindb,open(userdbfile,'w'))
         return False

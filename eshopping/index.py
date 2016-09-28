@@ -1,9 +1,13 @@
+#!/usr/bin/env python
 #_*_ coding:utf-8 _*_
+#Author:JoeyFang
 
-from select import getSelection
-from shopping import shoppingMain
-from creditCard import creditCardMain
-from backendAdmin import adminMain
+import sys
+from eshopping.config.config import BASE_DIR
+
+sys.path.append(BASE_DIR)
+
+from modules import select,shopping,creditCard,backendAdmin
 
 def main():
     mainList=['Shopping','CreditCard','BackendAdmin']
@@ -12,16 +16,16 @@ def main():
         for i in mainList:
             print '----%d\t%s-----'%(mainList.index(i)+1,i)
         print '''---------------------''' 
-        choice = getSelection(mainList)       
+        choice = select.getSelection(mainList)       
         if choice == 1:
             print '进入购物中心........'
-            shoppingMain()
+            shopping.shoppingMain()
         elif choice == 2:
             print '进入信用卡中心........'
-            creditCardMain()
+            creditCard.creditCardMain()
         else:
             print '进入后台管理.........'
-            adminMain()
+            backendAdmin.adminMain()
             
 if __name__ == '__main__':
     main()

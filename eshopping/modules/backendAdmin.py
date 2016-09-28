@@ -1,20 +1,17 @@
 #_*_ coding:utf-8 _*_
 '''后台管理程序:
-    1. 创建账户
-    2. 锁定账户
-    3. 解锁账户
-    4. 绑定信用卡
-    5. 锁定信用卡
-    6. 解锁信用卡
+    1. 创建账户    2. 锁定账户    3. 解锁账户
+    4. 绑定信用卡    5. 锁定信用卡    6. 解锁信用卡
     7. 提升额度
     8. 返回主菜单'''
     
 import json
 from select import getSelection
+from eshopping.config.config import ShoppingAcountFile, CreditCardAccountFile
 
 def creatAccount():
     '''创建购物账户并储存在shopping_userdb.txt中'''
-    useraccounts = json.load(open('shopping_userdb.txt','r'))
+    useraccounts = json.load(open(ShoppingAcountFile,'r'))
     print '创建购物账户........'
     while True:
         username = raw_input('Please input the new account name')
@@ -35,12 +32,12 @@ def creatAccount():
             else:
                 break
         if choice == "N":
-            json.dump(useraccounts,open('shopping_userdb.txt','w'))
+            json.dump(useraccounts,open(ShoppingAcountFile,'w'))
             break
 
 def lockAccount():
     '''锁定购物账户'''
-    useraccounts = json.load(open('shopping_userdb.txt','r'))
+    useraccounts = json.load(open(ShoppingAcountFile,'r'))
     while True:
         username = raw_input("Which account do you want to lock?")
         if username not in useraccounts:
@@ -51,13 +48,13 @@ def lockAccount():
         else:
             useraccounts[username]["locked"] = "y"
             print "Now you locked the user account %s"%username
-        json.dump(useraccounts,open("shopping_userdb.txt",'w'))
+        json.dump(useraccounts,open(ShoppingAcountFile,'w'))
         break
     
 
 def unlockAccount():
     '''解锁购物账户'''
-    useraccounts = json.load(open('shopping_userdb.txt','r'))
+    useraccounts = json.load(open(ShoppingAcountFile,'r'))
     while True:
         username = raw_input("Which account do you want to unlock?")
         if username not in useraccounts:
@@ -68,7 +65,7 @@ def unlockAccount():
         else:
             useraccounts[username]["locked"] = "n"
             print "Now you unlocked the user account %s"%username
-        json.dump(useraccounts,open("shopping_userdb.txt",'w'))
+        json.dump(useraccounts,open(ShoppingAcountFile,'w'))
         break
 
 def bindCreditCard():
@@ -76,7 +73,7 @@ def bindCreditCard():
 
 def lockCreditCard():
     '''锁定信用卡账户'''
-    carduserdb = json.load(open('carduserdb.txt','r'))
+    carduserdb = json.load(open(CreditCardAccountFile,'r'))
     while True:
         account = raw_input("Which credit account do you want to lock?")
         if account not in carduserdb:
@@ -87,12 +84,12 @@ def lockCreditCard():
         else:
             carduserdb[account]["locked"] = "y"
             print "Now you locked the user account %s"%account
-        json.dump(carduserdb,open("carduserdb.txt",'w'))
+        json.dump(carduserdb,open(CreditCardAccountFile,'w'))
         break
 
 def unlockCreditCard():
     '''解锁信用卡账户'''
-    carduserdb = json.load(open('carduserdb.txt','r'))
+    carduserdb = json.load(open(CreditCardAccountFile,'r'))
     while True:
         account = raw_input("Which credit account do you want to unlock?")
         if account not in carduserdb:
@@ -102,8 +99,8 @@ def unlockCreditCard():
             print "The user account %s has been unlocked!"%account
         else:
             carduserdb[account]["locked"] = "n"
-            print "Now you locked the user account %s"%account
-        json.dump(carduserdb,open("carduserdb.txt",'w'))
+            print "Now you unlocked the user account %s"%account
+        json.dump(carduserdb,open(CreditCardAccountFile,'w'))
         break
 
 def enhanceCreditLimit():
@@ -128,7 +125,7 @@ def adminLogin():
 def adminMain():
     '''后台管理主程序
     '''           
-    adminMenu = ['creatAccount','lockAccount','unlockAccount',\
+    adminMenu = ['creatAccount','lockAccount','unlockAccount',
                  'bindCreditCard','lockCreditCard','unlockCreditCard','enhanceCreditLimit']
     if not adminLogin():
         return

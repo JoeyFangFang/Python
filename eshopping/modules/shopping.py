@@ -1,32 +1,18 @@
 #_*_ coding:utf-8 _*_
 #Filename:shopping.py
 '''购物中心：
-    1. 购物
-    2. 清空购物车
-    3. 结算
-    4. 个人中心
+    1. 购物    2. 清空购物车    3. 结算    4. 个人中心
 '''
 import json
-from select import getSelection
-from select import getItem
+from select import getSelection,getItem
 from login import login
+from eshopping.config import config
 from creditCard import changeCardInfo
-#from collections import OrderedDict
-
-
-'''shoppingCart = {'user01':{'PC':1,'Mobile':2},
-                'user02':{'SDcard':2,'Bike':1},
-                'user03':{'Mp3':2}
-                }'''
-
-#json.dump(shoppingCart,open('cartdb.txt','w'),sort_keys = True)
-
-
 
 def Buy(userid):
     '''购物程序'''
-    goodsDict = json.load(open('goodsdb.txt','r'))
-    cartDict = json.load(open('cartdb.txt','r'))
+    goodsDict = json.load(open(config.GoodsDBFile,'r'))
+    cartDict = json.load(open(config.CartDBFile,'r'))
     usercart = cartDict[userid]
     print '''--------------显示商品列表-----------'''
     print '{0:>10}{1:>10}{2:>10}{3:>10}'.format('Item NO.','Item Name','Price','Stock')
@@ -43,7 +29,7 @@ def Buy(userid):
             cartDict[userid] = appendCart(goodsDict[good],usercart) #放入购物车
         else:
             break
-    json.dump(cartDict,open('cartdb.txt','w'))
+    json.dump(cartDict,open(config.CartDBFile,'w'))
         
 def appendCart(select,cart):
     '''放入购物车
@@ -62,23 +48,23 @@ def appendCart(select,cart):
 
 def emptyCart(userid):
     '''清空购物车'''
-    cartDict = json.load(open('cartdb.txt','r'))
+    cartDict = json.load(open(config.CartDBFile,'r'))
     print cartDict[userid]
     select = raw_input('Do you want to EMPTY your cart?(Y/N)?')
     if select =='Y':
         cartDict[userid] = {}
         print 'Your Cart is Empty!'
-    json.dump(cartDict,open('cartdb.txt','w'))
+    json.dump(cartDict,open(config.CartDBFile,'w'))
                 
 
 def Pay(userid):
     '''结算'''
-    userbindDict = json.load(open('userbind.txt','r'))
+    userbindDict = json.load(open(config.UserBindFile,'r'))
     if userbindDict.has_key(userid):
         carduser = userbindDict[userid]
         availableCredit = changeCardInfo(carduser, 1)
         print availableCredit,'可用额度',carduser,'用户名'
-        cartDict = json.load(open('cartdb.txt','r'))
+        cartDict = json.load(open(config.CartDBFile,'r'))
         usercart = cartDict[userid]
         total = 0
         for sub in usercart:
@@ -109,7 +95,7 @@ def PersonalCenter(userid):
 def BindCard(userid):
     '''绑定信用卡用户carduserdb到购物账户shopping_userdb；生成userbind关联文件
     '''
-    bindDict =json.load(open('userbind.txt','r'))
+    bindDict =json.load(open(config.UserBindFile,'r'))
     if userid in bindDict:
         print 'You have bound your shoppingaccount {0} to creditcard {1}'.format(userid,bindDict[userid])
         while True:
@@ -121,12 +107,12 @@ def BindCard(userid):
                 return bindDict[userid]
             else:
                 break
-    print '---Logon the creditcard account you want to bind---'  
-    cardaccount = login('carduserdb')
+    print '---Login the creditcard account you want to bind---'  
+    cardaccount = login(config.CreditCardAccountFile)
     if cardaccount:
         bindDict[userid] = cardaccount
         print 'You bound your shoppingaccount {0} to creditcard {1} successfully'.format(userid,bindDict[userid])
-        json.dump(bindDict,open('userbind.txt','w'))
+        json.dump(bindDict,open(config.UserBindFile,'w'))
         return bindDict[userid]
     else:
         print ' shopping account Logon Failed!'
@@ -140,12 +126,13 @@ def shoppingMain():
     '''购物中心主程序
     '''           
     shoppingMenu = ['Buy','EmptyCart','Pay','PersonalCenter','shopBack']
-    ID = login('shopping_userdb')
+    ID = login(config.ShoppingAcountFile)
     while ID:
         print '''----------购物中心-----------'''
         for i in shoppingMenu:
             print '----%d\t%s-----'%(shoppingMenu.index(i)+1,i)
         print '''---------------------''' 
+
         choice = getSelection(shoppingMenu)  
         if choice == 1:
             Buy(ID)
@@ -161,3 +148,7 @@ def shoppingMain():
             break
     else:
         print '登录错误，返回主菜单'
+       
+#       func_name = shoppingMenu[getSelection(shoppingMenu)-1]
+#       eval(func_name)(ID)
+        

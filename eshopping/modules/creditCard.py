@@ -1,20 +1,14 @@
 #_*_ coding:utf-8 _*_
 #Filename:creditCard.py
 '''信用卡主程序
-    1. 我的信用卡
-    2. 提现
-    3. 转账
-    4. 还款
-    5. 流水记录
-    6. 返回
+    1. 我的信用卡    2. 提现    3. 转账    4. 还款    5. 流水记录    6. 返回
 '''
 from login import login
 from select import getSelection
-import json
-import time
-import re
+import json,re,time
+from eshopping.config.config import CreditCardUsersFile, CardRecordLog,\
+    CreditCardAccountFile
 
-cardMenu = ['MyCard','Withdraws','Transfers','Repayment','CardLog','Logout']
 
 #cardinfo_dict={
 #    '0001':[20000,19000,10000,10000],
@@ -31,11 +25,11 @@ def changeCardInfo(cardid,changeitem,value=None):
     @param value:修改后的值
              所有读取json化操作，相关文件cardinfo.txt    
     '''
-    cardinfo_dict = json.load(open('cardinfo.txt','r'))
+    cardinfo_dict = json.load(open(CreditCardUsersFile,'r'))
     if value == None:
         return cardinfo_dict[cardid][changeitem]
     cardinfo_dict[cardid][changeitem] = value
-    json.dump(cardinfo_dict,open('cardinfo.txt','w'),sort_keys = True)
+    json.dump(cardinfo_dict,open(CreditCardUsersFile,'w'),sort_keys = True)
     return cardinfo_dict[cardid][changeitem]            
     
 def Withdraws(cardid):
@@ -128,43 +122,38 @@ def Repayment(cardid):
         else:
             print 'Please input a valid number!'
                 
-
-
 def MyCard(cardid):
+    CreditCardInfo = json.load(open(CreditCardUsersFile))
+    usercardinfo =CreditCardInfo[cardid]
     print '''-----------------我的信用卡-----------'''
-    with open('cardinfo.txt','r') as f:
-        for line in f:
-            userinfo = line.split()
-            if userinfo[0] == cardid:
-                print '''
+    print '''
         用户名：\t{0}
         消费限额：\t{1}
         当前消费额度：\t{2}
         提现限额：\t{3}
         当前提现额度：\t{4}
-                '''.format(*userinfo)
-                break
-                
+                '''.format(cardid,*usercardinfo)                
 def Transfers():
     pass
 
 def cardRecord(record,value):
-    recorddb = json.load(open('recordlog.txt','r'))
+    recorddb = json.load(open(CardRecordLog,'r'))
     if not recorddb.has_key(value[1]):
         recorddb[value[1]] = [record,]
     recorddb[value[1]].append(record)
-    json.dump(recorddb,open('recordlog.txt','w'),sort_keys = True)
+    json.dump(recorddb,open(CardRecordLog,'w'),sort_keys = True)
     
 
 def CardLog(cardid):
-    card_logs = json.load(open('recordlog.txt','r'))
+    card_logs = json.load(open(CardRecordLog,'r'))
     print '---------用户日志：%s-----------'%cardid
     for item in card_logs[cardid]:
         print item
     raw_input("Press 'ENTER' to back to the Menu")
 
 def creditCardMain():
-    ID = login('carduserdb')   #需完善登陆逻辑，登录失败后返回主程序
+    cardMenu = ['MyCard','Withdraws','Transfers','Repayment','CardLog','Logout']
+    ID = login(CreditCardAccountFile)   #需完善登陆逻辑，登录失败后返回主程序
     while ID:
         print '''----------信用卡中心-----------'''
         print '用户名：%s'%ID
@@ -188,5 +177,4 @@ def creditCardMain():
             break
     else:
         print '登录失败，返回主菜单'
-
 
