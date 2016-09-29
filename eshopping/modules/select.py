@@ -4,8 +4,6 @@
 '''判断选择是否正确'''
 
 import re
-import json
-from eshopping.config.config import GoodsDBFile
 
 #判断输入数字是否有效
 def isValidNum(num):
@@ -34,14 +32,3 @@ def getSelection(s_list):
                 continue
         print '[Warning]Please input a valid interge!'
         
-def getItem():
-    '''购物商品选择'''
-    goodsDict = json.load(open(GoodsDBFile,'r'))
-    while True:
-        for item in goodsDict:
-            print '\t{0:5}\t{1:5}\t{2:5}\t{3:5}'.format(item,*goodsDict[item])
-        selection = raw_input('Please input the Item Number what do you want to buy?')
-        if selection in goodsDict:
-            return selection
-        else:
-            print 'Please input the correct Item Number!'

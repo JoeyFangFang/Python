@@ -9,8 +9,7 @@
 from login import login
 from select import getSelection
 import json,re,time
-from eshopping.config.config import CreditCardUsersFile, CardRecordLog,\
-    CreditCardAccountFile
+
 
 
 #cardinfo_dict={

@@ -2,77 +2,96 @@
 #_*_ coding:utf-8 _*_
 #Author:JoeyFang
 #Filename:shopping.py
+from eshopping.utility.DBhandle import Select_All, Select_Item, Change_Item,\
+    Insert_Item, Del_Item
+from login import login
+from select import getSelection
 '''购物中心：
     1. 购物    2. 清空购物车    3. 结算    4. 个人中心
+    
 '''
-import json
-from select import getSelection,getItem
-from login import login
-from eshopping.config import config
-from creditCard import changeCardInfo
+
+def ShowGoods():
+    goodslist = Select_All('GoodsInfo')
+    print '''--------------显示商品列表-----------'''
+    print '{0:>10}{1:>10}{2:>10}{3:>10}'.format('Item NO.','Item Name','Price','Stock')
+    for item in goodslist:
+        print '{0:10}{1:10}{2:10}{3:10}'.format(*item)
+    print '''-------------------------------'''
+
+def getItem():
+    '''购物商品选择'''
+    while True:
+        ShowGoods()
+        selection = raw_input('Please input the Item Number what do you want to buy?')
+        result = Select_Item('GoodsInfo', 'id', selection)
+        if not result:
+            print 'Please input the correct Item Number!'
+        else:
+            return result[0]
 
 def Buy(userid):
     '''购物程序'''
-    goodsDict = json.load(open(config.GoodsDBFile,'r'))
-    cartDict = json.load(open(config.CartDBFile,'r'))
-    usercart = cartDict[userid]
-    print '''--------------显示商品列表-----------'''
-    print '{0:>10}{1:>10}{2:>10}{3:>10}'.format('Item NO.','Item Name','Price','Stock')
-    for item in goodsDict:
-        print '{0:10}{1:10}{2:10}{3:10}'.format(item,*goodsDict[item])
-    print '''-------------------------------'''
     while True:
+        usercart = Select_Item('CartInfo', 'username',userid)
         print '''--------------显示购物车-----------''' 
+        print '{0:>10}{1:>10}{2:>10}{3:>10}{4:>10}'.format('Id.','User Name','Item','QTy','Amount')
         for item in usercart:
-            print 'item {0:>10} amount {1:>10} subtotal{2:10}'.format(item,*usercart[item])
+            print '{0:>10}{1:>10}{2:>10}{3:>10}{4:>10}'.format(*item)
         Dobuy = raw_input('Do you want to buy?(Y/N)')
         if Dobuy =='Y':
             good = getItem()
-            cartDict[userid] = appendCart(goodsDict[good],usercart) #放入购物车
+            itemname,price = str(good[1]),good[2]
+            found = False
+            for item in usercart:
+                if itemname == str(item[2]):
+                    itemid = item[0]
+                    newQty = item[3]+1
+                    newAmount = item[4]+price
+                    Change_Item('CartInfo','id', 'Qty', (newQty,itemid))
+                    Change_Item('CartInfo','id', 'itemAmount', (newAmount,itemid))
+                    found = True
+                    break
+            if not found:
+                itemdetail ={'username':userid,
+                        'item':itemname,
+                        'Qty':1,
+                        'itemamount':price}
+                Insert_Item('CartInfo',**itemdetail)
         else:
             break
-    json.dump(cartDict,open(config.CartDBFile,'w'))
         
-def appendCart(select,cart):
-    '''放入购物车
-    @param select:所选商品对应信息  "Mobile", 2300, 50
-    @param cart:购物车信息   "Mp3": [2,840]'''
-    itemname = select[0]
-    price = select[1]
-    if cart.has_key(itemname):
-        cart[itemname][0]+=1 #
-        cart[itemname][1] = cart[itemname][0]*price        
-        print 'add',select,'+1','***','subtotal',cart[itemname][1]
-    else:
-        cart[itemname] = [1,price]
-        print 'new',select,'+1'
-    return cart
-
 def emptyCart(userid):
     '''清空购物车'''
-    cartDict = json.load(open(config.CartDBFile,'r'))
-    print cartDict[userid]
+    usercart = Select_Item('CartInfo', 'username',userid)
+    print '''--------------显示购物车-----------''' 
+    print '{0:>10}{1:>10}{2:>10}{3:>10}{4:>10}'.format('Id.','User Name','Item','QTy','Amount')
+    for item in usercart:
+        print '{0:>10}{1:>10}{2:>10}{3:>10}{4:>10}'.format(*item)
     select = raw_input('Do you want to EMPTY your cart?(Y/N)?')
     if select =='Y':
-        cartDict[userid] = {}
+        Del_Item('CartInfo', 'username', userid)
         print 'Your Cart is Empty!'
-    json.dump(cartDict,open(config.CartDBFile,'w'))
                 
 
 def Pay(userid):
     '''结算'''
-    userbindDict = json.load(open(config.UserBindFile,'r'))
-    if userbindDict.has_key(userid):
-        carduser = userbindDict[userid]
-        availableCredit = changeCardInfo(carduser, 1)
-        print availableCredit,'可用额度',carduser,'用户名'
-        cartDict = json.load(open(config.CartDBFile,'r'))
-        usercart = cartDict[userid]
+    shoppinguser = Select_Item('ShoppingAccounts', 'username', userid)[0]
+    print shoppinguser
+    account = str(shoppinguser[3])
+    if account:
+        usercart = Select_Item('CartInfo', 'username',userid)   #获取购物车信息
         total = 0
-        for sub in usercart:
-            total += usercart[sub][1]
-        if availableCredit>= total:
-            changeCardInfo(carduser, 1, availableCredit-total)
+        for item in usercart:           #获取总计
+            itemamount = item[4]
+            total +=itemamount
+        usercard = Select_Item('CreditCardInfo', 'creditaccount', account)[0]
+        print usercard
+        CreditLimit,AvailableCredit,WithdrawLimit,Withdraws = usercard[1:]
+        print CreditLimit,AvailableCredit,WithdrawLimit,Withdraws
+        if AvailableCredit>= total:
+            AvailableCredit = AvailableCredit -total
+            Change_Item('CreditCardInfo', 'creditaccount', 'AvailableCredit', (AvailableCredit,account))
             print '购物信息，结算信息'   #待完善
             emptyCart(userid)
         else:
@@ -97,28 +116,27 @@ def PersonalCenter(userid):
 def BindCard(userid):
     '''绑定信用卡用户carduserdb到购物账户shopping_userdb；生成userbind关联文件
     '''
-    bindDict =json.load(open(config.UserBindFile,'r'))
-    if userid in bindDict:
-        print 'You have bound your shoppingaccount {0} to creditcard {1}'.format(userid,bindDict[userid])
+    userdetail = Select_Item('ShoppingAccounts', 'username', userid)[0]
+    account = userdetail[3]
+    if account:
+        print 'You have bound your shoppingaccount {0} to creditcard {1}'.format(userid,account)
         while True:
             choice = raw_input('Do you want change binding?(Y/N)')
             if choice != 'N' and choice !='Y':
                 print 'Please do  a vilid selection!'
                 continue
             elif choice =='N':
-                return bindDict[userid]
+                return account
             else:
                 break
     print '---Login the creditcard account you want to bind---'  
-    cardaccount = login(config.CreditCardAccountFile)
+    cardaccount = login('CreditCardAccounts','cardaccount')
     if cardaccount:
-        bindDict[userid] = cardaccount
-        print 'You bound your shoppingaccount {0} to creditcard {1} successfully'.format(userid,bindDict[userid])
-        json.dump(bindDict,open(config.UserBindFile,'w'))
-        return bindDict[userid]
+        Change_Item('ShoppingAccounts', 'username', 'bindcard', (cardaccount,userid))
+        print 'You bound your shoppingaccount {0} to creditcard {1} successfully'.format(userid,cardaccount)
+        return cardaccount
     else:
         print ' shopping account Logon Failed!'
-        return False
         
     
 def ShoppingLog(cardid):
@@ -127,8 +145,8 @@ def ShoppingLog(cardid):
 def shoppingMain():
     '''购物中心主程序
     '''           
-    shoppingMenu = ['Buy','EmptyCart','Pay','PersonalCenter','shopBack']
-    ID = login(config.ShoppingAcountFile)
+    shoppingMenu = ['Buy','EmptyCart','Pay','PersonalCenter','ShopBack']
+    ID = login('ShoppingAccounts','username')
     while ID:
         print '''----------购物中心-----------'''
         for i in shoppingMenu:
@@ -146,11 +164,10 @@ def shoppingMain():
             PersonalCenter(ID)
             print 'PersonalCenter'
         else:
-            print 'shopBack'
+            print 'ShopBack'
             break
     else:
         print '登录错误，返回主菜单'
+        
        
-#       func_name = shoppingMenu[getSelection(shoppingMenu)-1]
-#       eval(func_name)(ID)
         

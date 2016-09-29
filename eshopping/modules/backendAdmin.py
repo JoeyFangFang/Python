@@ -9,7 +9,6 @@
     
 import json
 from select import getSelection
-from eshopping.config.config import ShoppingAcountFile, CreditCardAccountFile
 
 def creatAccount():
     '''创建购物账户并储存在shopping_userdb.txt中'''

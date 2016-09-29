@@ -3,7 +3,7 @@
 #Author:JoeyFang
 
 import sys
-from eshopping.config.config import BASE_DIR
+from config import BASE_DIR
 
 sys.path.append(BASE_DIR)
 
@@ -29,3 +29,4 @@ def main():
             
 if __name__ == '__main__':
     main()
+

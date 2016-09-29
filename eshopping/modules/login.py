@@ -1,22 +1,26 @@
 #_*_ coding:utf-8 _*_
 '''信用卡登录程序'''
 
-import json
+from eshopping.utility.DBhandle import Select_Item,Change_Item
 
-def login(userdbfile):
+
+def login(accountdb,option):
+    '''
+    @param accountdb:登录用户数据库
+    @param option：用户字段名 
+    '''
     #设定计数器
     count = 0
-    #设定用户字典，用户锁定字典
-    logindb = json.load(open(userdbfile,'r'))  
     while count < 3:
         print "------Please Login:---------"
         name = raw_input("User:")
         password = raw_input("Password:")
-        if name not in logindb.keys() or password != logindb[name]["password"] :
+        result = Select_Item(accountdb,option,name)[0]
+        if (not result) or result[1] != password:
             count +=1
-            print "用户名/密码错误!你还有{0}次机会".format(3-count)
+            print "用户名或密码错误!你还有{0}次机会".format(3-count)
             continue
-        if logindb[name]["locked"] == 'y':
+        if result[2] == 'locked':
             print "[505]User is Locked. Please phone to 110!"
             continue
         else:
@@ -24,8 +28,8 @@ def login(userdbfile):
             return name
 
     else:
-        if name in logindb.keys():
-            logindb[name]["locked"]='y'
+        if result:
+            v = 'locked',name
+            Change_Item(accountdb, option, 'lockstate', v)
             print "User is Locked. Please phone to 110!"
-            json.dump(logindb,open(userdbfile,'w'))
-        return False
+    

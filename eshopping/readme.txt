@@ -68,3 +68,26 @@ v1：函数式流程：
 
 2016.9.27
 	采用sqlite3数据库，学习数据库编程部分，重新编写程序
+2016.9.29
+	初步完善程序中sqlite3数据库操作
+	修改程序文件结构为 模块modules，数据操作utility，配置config
+│  .gitignore
+│  config.py
+│  index.py
+│  readme.txt
+│  __init__.py
+│
+├─modules
+│      backendAdmin.py
+│      creditCard.py
+│      login.py
+│      login.pyc
+│      personalcenter.py
+│      select.py
+│      shopping.py
+│      __init__.py
+└─utility
+        DBhandle.py
+        eshopping.db3
+        sqlhandle.py
+        __init__.py
