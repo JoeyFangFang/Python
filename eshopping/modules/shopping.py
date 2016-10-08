@@ -88,7 +88,6 @@ def Pay(userid):
         usercard = Select_Item('CreditCardInfo', 'creditaccount', account)[0]
         print usercard
         CreditLimit,AvailableCredit,WithdrawLimit,Withdraws = usercard[1:]
-        print CreditLimit,AvailableCredit,WithdrawLimit,Withdraws
         if AvailableCredit>= total:
             AvailableCredit = AvailableCredit -total
             Change_Item('CreditCardInfo', 'creditaccount', 'AvailableCredit', (AvailableCredit,account))
